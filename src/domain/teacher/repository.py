@@ -65,6 +65,7 @@ class TeacherDataManagerRepository:
                 self.model.middle_name,
                 self.model.degree,
                 self.model.exp,
+                self.model.course_id,
             )
         )
         answer = await self.session.execute(stmt)
@@ -87,6 +88,7 @@ class TeacherDataManagerRepository:
                 self.model.middle_name,
                 self.model.degree,
                 self.model.exp,
+                self.model.course_id,
             )
         )
         answer = await self.session.execute(stmt)
@@ -107,6 +109,7 @@ class TeacherDataManagerRepository:
                 self.model.middle_name,
                 self.model.degree,
                 self.model.exp,
+                self.model.course_id,
             )
         )
         answer = await self.session.execute(stmt)

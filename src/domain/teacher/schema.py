@@ -23,6 +23,7 @@ class UpdateTeacher(GetTeacherByFirstName, GetTeacherByLastName):
 
 class RegisterTeacher(UpdateTeacher):
     user_id: UUID
+    course_id: UUID
 
 
 class TeacherReturn(GetTeacherById, RegisterTeacher):

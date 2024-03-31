@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 class GetCourseById(BaseModel):
@@ -15,10 +15,6 @@ class CourseUpdate(GetCourseByTitle):
     price: int
     description: str
     duration: int
-
-    @field_validator("duration")
-    def convert_exp(cls, data):
-        return f"{data} days"
 
 
 class CourseCreate(CourseUpdate):
