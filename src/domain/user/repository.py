@@ -17,7 +17,7 @@ from infrastructure.database.session import vortex
 
 
 class UserShowRepository:
-    def __init__(self, session: AsyncSession = Depends(vortex.session_gate)):
+    def __init__(self, session: AsyncSession = Depends(vortex.session_scope)):
         self.session = session
         self.model = User
 
@@ -65,7 +65,7 @@ class UserShowRepository:
 
 
 class UserDataManagerRepository:
-    def __init__(self, session: AsyncSession = Depends(vortex.session_gate)):
+    def __init__(self, session: AsyncSession = Depends(vortex.session_scope)):
         self.session = session
         self.model = User
 

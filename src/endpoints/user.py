@@ -27,14 +27,14 @@ async def show_all_users(
     return await repository.get_all_users()
 
 
-@user_router.get("/search/{user_id}", response_model=UserReturnData)
+@user_router.get("/search_id/{user_id}", response_model=UserReturnData)
 async def show_user_by_id(
     user_id: UUID, repository: UserShowService = Depends(UserShowService)
 ) -> UserReturnData:
     return await repository.find_user_by_id(cmd=GetUserById(id=user_id))
 
 
-@user_router.get("/search/{login}", response_model=UserReturnData)
+@user_router.get("/search_login/{login}", response_model=UserReturnData)
 async def show_user_by_login(
     login: str, repository: UserShowService = Depends(UserShowService)
 ) -> UserReturnData:

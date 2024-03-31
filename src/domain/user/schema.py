@@ -40,7 +40,6 @@ class UserReturnData(GetUserById, GetUserByLogin):
     email: EmailStr
     age: int
     phone_number: str = Field(examples=["89986661488", "+79986661488"])
-    is_verified: bool
     registered_at: datetime
 
 
