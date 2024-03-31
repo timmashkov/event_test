@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.database.models import Base
+from infrastructure.database.models import Base
 
 if TYPE_CHECKING:
     from .employer import Employer
@@ -13,9 +13,7 @@ if TYPE_CHECKING:
 class Company(Base):
     __tablename__ = "company"
 
-    name: Mapped[str] = mapped_column(
-        String(20), unique=True, nullable=False, default="Пользователь"
-    )
+    name: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
     bio: Mapped[str] = mapped_column(Text, unique=False, nullable=True)
     phone_number: Mapped[str] = mapped_column(String(11), unique=True, nullable=False)
     address: Mapped[str] = mapped_column(Text, unique=True, nullable=False)

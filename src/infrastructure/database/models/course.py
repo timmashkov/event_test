@@ -4,7 +4,7 @@ from uuid import UUID
 from sqlalchemy import String, Integer, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.database.models import Base
+from infrastructure.database.models import Base
 
 if TYPE_CHECKING:
     from .company import Company
@@ -14,9 +14,7 @@ if TYPE_CHECKING:
 class Course(Base):
     __tablename__ = "course"
 
-    title: Mapped[str] = mapped_column(
-        String(20), unique=True, nullable=False, default="Пользователь"
-    )
+    title: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
     price: Mapped[int] = mapped_column(Integer, nullable=False, unique=False)
     description: Mapped[str] = mapped_column(Text, nullable=False, unique=False)
     duration: Mapped[int] = mapped_column(Integer, nullable=False, unique=False)

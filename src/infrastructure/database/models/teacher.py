@@ -4,14 +4,16 @@ from uuid import UUID
 from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from . import Base
+
 if TYPE_CHECKING:
-    from .user import User
     from .course import Course
 
 
-class Teacher(User):
+class Teacher(Base):
     __tablename__ = "teacher"
 
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
     first_name: Mapped[str] = mapped_column(String(20), unique=False, nullable=False)
     last_name: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
     middle_name: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)

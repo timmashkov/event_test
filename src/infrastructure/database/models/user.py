@@ -1,13 +1,13 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, Integer, func, Text, UUID, ForeignKey
+from sqlalchemy import String, Integer, func, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.infrastructure.database.models import Base
+from infrastructure.database.models import Base
 
 if TYPE_CHECKING:
-    from .role import Role
+    from .feedback import Feedback
 
 
 class User(Base):
@@ -25,5 +25,4 @@ class User(Base):
         server_default=func.now(), default=datetime.now
     )
 
-    role_id: Mapped[UUID] = mapped_column(ForeignKey("role.id"))
-    role: Mapped["Role"] = relationship("Role", back_populates="user")
+    feedback: Mapped["Feedback"] = relationship("Feedback", back_populates="author")
