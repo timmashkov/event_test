@@ -10,9 +10,9 @@ from domain.user.schema import (
     CreateUser,
     UpdateUser,
 )
+from infrastructure.authentification.auth_handler import AuthHandler
 from infrastructure.database.models import User
 from infrastructure.exceptions.user_exceptions import UserNotFound, UserAlreadyExist
-from service.auth_handler import AuthHandler
 
 
 class UserShowService:
