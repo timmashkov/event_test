@@ -6,6 +6,7 @@ from domain.company.repository import (
     CompanyShowRepository,
     CompanyDataManagerRepository,
 )
+from infrastructure.cache.cache_handler import CacheService
 from infrastructure.database.models import Company
 from domain.company.schema import (
     GetCompanyById,
@@ -21,11 +22,16 @@ from infrastructure.exceptions.comp_exceptions import (
 
 class CompanyShowService:
     def __init__(
-        self, repository: CompanyShowRepository = Depends(CompanyShowRepository)
+        self,
+        repository: CompanyShowRepository = Depends(CompanyShowRepository),
+        cacher: CacheService = Depends(CacheService),
     ):
         self.repository = repository
+        self.cacher = cacher
+        self._key = str(self.__class__)
 
     async def get_all_comps(self) -> list[Company]:
+        await self.cacher.read_cache(self._key)
         answer = await self.repository.get_comps()
         return answer
 
@@ -33,12 +39,14 @@ class CompanyShowService:
         answer = await self.repository.get_comp_by_id(cmd=cmd)
         if not answer:
             raise CompanyNotFound
+        await self.cacher.read_cache(self._key)
         return answer
 
     async def find_comps_by_name(self, cmd: GetCompanyByName) -> CompanyReturn:
         answer = await self.repository.get_comp_by_name(cmd=cmd)
         if not answer:
             raise CompanyNotFound
+        await self.cacher.read_cache(self._key)
         return answer
 
 
@@ -48,12 +56,16 @@ class CompanyDataManagerService:
         repository: CompanyDataManagerRepository = Depends(
             CompanyDataManagerRepository
         ),
+        cacher: CacheService = Depends(CacheService),
     ) -> None:
         self.repository = repository
+        self.cacher = cacher
+        self._key = str(self.__class__)
 
     async def register_comp(self, cmd: CompanyCreate) -> CompanyReturn:
         try:
             answer = await self.repository.create_comp(cmd=cmd)
+            await self.cacher.create_cache(self._key, cmd.model_dump())
             return answer
         except (UniqueViolationError, IntegrityError):
             raise CompanyAlreadyExist
@@ -64,10 +76,12 @@ class CompanyDataManagerService:
         answer = await self.repository.update_comp(cmd=cmd, model_id=model_id)
         if not answer:
             raise CompanyNotFound
+        await self.cacher.create_cache(self._key, cmd.model_dump())
         return answer
 
     async def drop_comp(self, model_id: GetCompanyById) -> CompanyReturn:
         answer = await self.repository.delete_comp(model_id=model_id)
         if not answer:
             raise CompanyNotFound
+        await self.cacher.delete_cache(self._key)
         return answer
