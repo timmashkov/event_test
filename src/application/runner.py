@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 import uvicorn
 
+from admin.admin import admin
 from application.server import ApiServer
 
 
@@ -12,7 +13,7 @@ def start_app() -> FastAPI:
 
     app = ApiServer.app
 
-    return ApiServer(app).get_app()
+    return ApiServer(app, admin).get_app()
 
 
 if __name__ == "__main__":

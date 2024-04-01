@@ -23,8 +23,12 @@ class ApiServer:
     app.include_router(router=emp_router, tags=["Employers"])
     app.include_router(router=feed_router, tags=["Feedback"])
 
-    def __init__(self, app: FastAPI):
+    def __init__(self, app: FastAPI, admin_panel):
         self.__app = app
+        self.__admin_panel = admin_panel
 
     def get_app(self) -> FastAPIInstance:
         return self.__app
+
+    def get_admin(self):
+        return self.__admin_panel
