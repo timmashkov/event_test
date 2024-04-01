@@ -1,0 +1,48 @@
+version: "3.7"
+services:
+  db_event:
+    image: postgres:latest
+    container_name: db_event
+    command: postgres -p 5121
+    expose:
+      - 5121
+    env_file:
+      - .env_prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -p 5121"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: always
+
+  redis_event:
+    image: redis:latest
+    container_name: redis_event
+    expose:
+      - 5370
+    ports:
+      - "5370:5370"
+    env_file:
+      - .env_prod
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  main_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env_prod
+    container_name: main_app
+    command: sh -c "chmod +x /event_project/docker/app_scrypt.sh && /event_project/docker/app_scrypt.sh"
+    ports:
+      - "8814:8000"
+    depends_on:
+      db_event:
+        condition: service_healthy
+      redis_event:
+        condition: service_healthy

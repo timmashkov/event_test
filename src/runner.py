@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 import uvicorn
 
-from admin.admin import admin
+from admin_panel.admin_main import admin
 from application.server import ApiServer
 
 

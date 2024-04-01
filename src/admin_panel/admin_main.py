@@ -1,9 +1,7 @@
 from sqladmin import Admin
 
-from admin.admin_auth import auth_backend
-
-
-from admin.admin_views import (
+from admin_panel.admin_auth import auth_backend
+from admin_panel.admin_views import (
     UserAdmin,
     CourseAdmin,
     EmployerAdmin,

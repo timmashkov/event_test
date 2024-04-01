@@ -1,6 +1,7 @@
 from typing import TypeVar
 
 from fastapi import FastAPI
+from sqladmin import Admin
 
 from endpoints.company import comp_router
 from endpoints.course import cour_router
@@ -23,7 +24,7 @@ class ApiServer:
     app.include_router(router=emp_router, tags=["Employers"])
     app.include_router(router=feed_router, tags=["Feedback"])
 
-    def __init__(self, app: FastAPI, admin_panel):
+    def __init__(self, app: FastAPI, admin_panel: Admin):
         self.__app = app
         self.__admin_panel = admin_panel
 
