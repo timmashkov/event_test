@@ -6,7 +6,7 @@ from domain.company.schema import (
     GetCompanyById,
     GetCompanyByName,
     CompanyReturn,
-    CompanyCreate,
+    CompanyCreate, CompanyWithCommand, CompanyWithCourse, CompanyFull,
 )
 from infrastructure.database.models import Company
 from service.company_service import CompanyShowService, CompanyDataManagerService
@@ -26,6 +26,27 @@ async def show_comp_by_id(
     comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
 ) -> CompanyReturn:
     return await repository.find_comps_by_id(cmd=GetCompanyById(id=comp_id))
+
+
+@comp_router.get("/emps/{comp_id}", response_model=CompanyWithCommand)
+async def show_comp_emps(
+    comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
+) -> CompanyWithCommand:
+    return await repository.show_comp_with_emps(cmd=GetCompanyById(id=comp_id))
+
+
+@comp_router.get("/courses/{comp_id}", response_model=CompanyWithCourse)
+async def show_comp_cours(
+    comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
+) -> CompanyWithCourse:
+    return await repository.show_comp_with_cours(cmd=GetCompanyById(id=comp_id))
+
+
+@comp_router.get("/full/{comp_id}", response_model=CompanyFull)
+async def show_comp_full(
+    comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
+) -> CompanyFull:
+    return await repository.show_comp_full(cmd=GetCompanyById(id=comp_id))
 
 
 @comp_router.get("/search_name/{name}", response_model=CompanyReturn)

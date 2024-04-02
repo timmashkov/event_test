@@ -2,6 +2,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
+from domain.course.schema import CourseReturn
+from domain.employer.schema import EmployerReturn
+
 
 class GetCompanyById(BaseModel):
     id: UUID
@@ -27,4 +30,16 @@ class CompanyCreate(GetCompanyByName):
 
 
 class CompanyReturn(GetCompanyById, CompanyCreate):
+    pass
+
+
+class CompanyWithCommand(CompanyReturn):
+    command: list[EmployerReturn] | None
+
+
+class CompanyWithCourse(CompanyReturn):
+    courses: list[CourseReturn] | None
+
+
+class CompanyFull(CompanyWithCommand, CompanyWithCourse):
     pass

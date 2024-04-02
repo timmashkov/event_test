@@ -22,6 +22,7 @@ class BaseConfig(BaseSettings):
     # Redis settings
     REDIS_HOST: str
     REDIS_PORT: int
+    EXPIRATION: int
 
     @property
     def redis_url(self):

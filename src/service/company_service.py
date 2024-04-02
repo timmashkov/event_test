@@ -12,7 +12,7 @@ from domain.company.schema import (
     GetCompanyById,
     GetCompanyByName,
     CompanyReturn,
-    CompanyCreate,
+    CompanyCreate, CompanyWithCommand, CompanyWithCourse, CompanyFull,
 )
 from infrastructure.exceptions.comp_exceptions import (
     CompanyNotFound,
@@ -47,6 +47,24 @@ class CompanyShowService:
         if not answer:
             raise CompanyNotFound
         await self.cacher.read_cache(self._key)
+        return answer
+
+    async def show_comp_with_emps(self, cmd: GetCompanyById) -> CompanyWithCommand:
+        answer = await self.repository.get_comp_with_emps(cmd=cmd)
+        if not answer:
+            raise CompanyNotFound
+        return answer
+
+    async def show_comp_with_cours(self, cmd: GetCompanyById) -> CompanyWithCourse:
+        answer = await self.repository.get_comp_with_cours(cmd=cmd)
+        if not answer:
+            raise CompanyNotFound
+        return answer
+
+    async def show_comp_full(self, cmd: GetCompanyById) -> CompanyFull:
+        answer = await self.repository.get_comp_full(cmd=cmd)
+        if not answer:
+            raise CompanyNotFound
         return answer
 
 

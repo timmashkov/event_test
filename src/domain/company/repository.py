@@ -1,12 +1,16 @@
 from fastapi import Depends
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from domain.company.schema import (
     GetCompanyById,
     GetCompanyByName,
     CompanyReturn,
     CompanyCreate,
+    CompanyWithCommand,
+    CompanyWithCourse,
+    CompanyFull,
 )
 from infrastructure.database.models import Company
 from infrastructure.database.session import vortex
@@ -33,6 +37,41 @@ class CompanyShowRepository:
         stmt = select(self.model).where(self.model.name == cmd.name)
         answer = await self.session.execute(stmt)
         result = answer.scalar_one_or_none()
+        return result
+
+    async def get_comp_with_emps(
+        self, cmd: GetCompanyById
+    ) -> CompanyWithCommand | None:
+        stmt = (
+            select(self.model)
+            .options(joinedload(self.model.command))
+            .where(self.model.id == cmd.id)
+        )
+        answer = await self.session.execute(stmt)
+        result = answer.unique().scalar_one_or_none()
+        return result
+
+    async def get_comp_with_cours(
+        self, cmd: GetCompanyById
+    ) -> CompanyWithCourse | None:
+        stmt = (
+            select(self.model)
+            .options(joinedload(self.model.courses))
+            .where(self.model.id == cmd.id)
+        )
+        answer = await self.session.execute(stmt)
+        result = answer.unique().scalar_one_or_none()
+        return result
+
+    async def get_comp_full(self, cmd: GetCompanyById) -> CompanyFull | None:
+        stmt = (
+            select(self.model)
+            .options(joinedload(self.model.command))
+            .options(joinedload(self.model.courses))
+            .where(self.model.id == cmd.id)
+        )
+        answer = await self.session.execute(stmt)
+        result = answer.unique().scalar_one_or_none()
         return result
 
 
