@@ -12,7 +12,10 @@ from domain.company.schema import (
     GetCompanyById,
     GetCompanyByName,
     CompanyReturn,
-    CompanyCreate, CompanyWithCommand, CompanyWithCourse, CompanyFull,
+    CompanyCreate,
+    CompanyWithCommand,
+    CompanyWithCourse,
+    CompanyFull,
 )
 from infrastructure.exceptions.comp_exceptions import (
     CompanyNotFound,

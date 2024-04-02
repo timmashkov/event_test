@@ -1,6 +1,7 @@
 from fastapi import Depends
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from domain.course.schema import (
     GetCourseById,
@@ -8,6 +9,7 @@ from domain.course.schema import (
     CourseReturn,
     CourseCreate,
     CourseUpdate,
+    CourseWithTeachers,
 )
 from infrastructure.database.models import Course
 from infrastructure.database.session import vortex
@@ -34,6 +36,18 @@ class CourseShowRepository:
         stmt = select(self.model).where(self.model.title == cmd.title)
         answer = await self.session.execute(stmt)
         result = answer.scalar_one_or_none()
+        return result
+
+    async def get_course_with_teachers(
+        self, cmd: GetCourseById
+    ) -> CourseWithTeachers | None:
+        stmt = (
+            select(self.model)
+            .options(joinedload(self.model.teachers))
+            .where(self.model.id == cmd.id)
+        )
+        answer = await self.session.execute(stmt)
+        result = answer.unique().scalar_one_or_none()
         return result
 
 

@@ -24,6 +24,11 @@ user_router = APIRouter(prefix="/user")
 async def show_all_users(
     repository: UserShowService = Depends(UserShowService),
 ) -> list[User]:
+    """
+    Корутина возвращает список юзеров
+    :param repository:
+    :return:
+    """
     return await repository.get_all_users()
 
 
@@ -31,6 +36,12 @@ async def show_all_users(
 async def show_user_by_id(
     user_id: UUID, repository: UserShowService = Depends(UserShowService)
 ) -> UserReturnData:
+    """
+    Корутина возвращает юзера по айди
+    :param user_id:
+    :param repository:
+    :return:
+    """
     return await repository.find_user_by_id(cmd=GetUserById(id=user_id))
 
 
@@ -38,6 +49,12 @@ async def show_user_by_id(
 async def show_user_by_login(
     login: str, repository: UserShowService = Depends(UserShowService)
 ) -> UserReturnData:
+    """
+    Корутина возвращает юзера по логину
+    :param login:
+    :param repository:
+    :return:
+    """
     return await repository.find_user_by_login(cmd=GetUserByLogin(login=login))
 
 
@@ -48,6 +65,12 @@ async def registration(
     cmd: CreateUser,
     repository: UserDataManagerService = Depends(UserDataManagerService),
 ) -> UserReturnData:
+    """
+    Корутина создает юзера
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.register_user(cmd=cmd)
 
 
@@ -57,6 +80,13 @@ async def upd_user(
     cmd: UpdateUser,
     repository: UserDataManagerService = Depends(UserDataManagerService),
 ) -> UserReturnData:
+    """
+    Корутина апдейтит юзера
+    :param user_id:
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.change_user(cmd=cmd, model_id=GetUserById(id=user_id))
 
 
@@ -64,6 +94,12 @@ async def upd_user(
 async def del_user(
     user_id: UUID, repository: UserDataManagerService = Depends(UserDataManagerService)
 ) -> UserReturnData:
+    """
+    Корутина удаляет юзера
+    :param user_id:
+    :param repository:
+    :return:
+    """
     return await repository.drop_user(model_id=GetUserById(id=user_id))
 
 
@@ -71,6 +107,12 @@ async def del_user(
 async def login_user(
     cmd: UserLogin, repository: AuthService = Depends(AuthService)
 ) -> dict[str, str]:
+    """
+    Корутина для логина
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.login(cmd=cmd)
 
 
@@ -79,6 +121,12 @@ async def logout_user(
     credentials: HTTPAuthorizationCredentials = Security(jwt_header),
     repository: AuthService = Depends(AuthService),
 ) -> UserJwtToken:
+    """
+    Корутина для логаута
+    :param credentials:
+    :param repository:
+    :return:
+    """
     token = credentials.credentials
     return await repository.logout(refresh_token=token)
 
@@ -88,6 +136,12 @@ async def refresh_user_token(
     repository: AuthService = Depends(AuthService),
     credentials: HTTPAuthorizationCredentials = Security(jwt_header),
 ) -> UserJwtToken:
+    """
+    Корутина рефрешит токен
+    :param repository:
+    :param credentials:
+    :return:
+    """
     token = credentials.credentials
     return await repository.refresh_token(refresh_token=token)
 
@@ -97,5 +151,11 @@ async def is_auth(
     repository: AuthService = Depends(AuthService),
     credentials: HTTPAuthorizationCredentials = Security(jwt_header),
 ) -> UserJwtToken:
+    """
+    Корутина проверяет логин
+    :param repository:
+    :param credentials:
+    :return:
+    """
     token = credentials.credentials
     return await repository.check_auth(refresh_token=token)

@@ -14,6 +14,7 @@ from domain.course.schema import (
     CourseReturn,
     CourseCreate,
     CourseUpdate,
+    CourseWithTeachers,
 )
 from infrastructure.exceptions.cours_exception import (
     CourseNotFound,
@@ -48,6 +49,12 @@ class CompanyShowService:
         if not answer:
             raise CourseNotFound
         await self.cacher.read_cache(self._key)
+        return answer
+
+    async def show_course_with_teachers(self, cmd: GetCourseById) -> CourseWithTeachers:
+        answer = await self.repository.get_course_with_teachers(cmd=cmd)
+        if not answer:
+            raise CourseNotFound
         return answer
 
 

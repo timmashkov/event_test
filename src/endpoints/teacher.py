@@ -20,6 +20,11 @@ teach_router = APIRouter(prefix="/teachers")
 async def show_all_teach(
     repository: TeacherShowService = Depends(TeacherShowService),
 ) -> list[Teacher]:
+    """
+    Корутина возвращает список преподавателей
+    :param repository:
+    :return:
+    """
     return await repository.get_all_teachers()
 
 
@@ -27,6 +32,12 @@ async def show_all_teach(
 async def show_teach_by_id(
     teach_id: UUID, repository: TeacherShowService = Depends(TeacherShowService)
 ) -> TeacherReturn:
+    """
+    Корутина возвращает препода по айди
+    :param teach_id:
+    :param repository:
+    :return:
+    """
     return await repository.find_teacher_by_id(cmd=GetTeacherById(id=teach_id))
 
 
@@ -34,6 +45,12 @@ async def show_teach_by_id(
 async def show_teach_by_first(
     first_name: str, repository: TeacherShowService = Depends(TeacherShowService)
 ) -> TeacherReturn:
+    """
+    Корутина возвращает препода по имени
+    :param first_name:
+    :param repository:
+    :return:
+    """
     return await repository.find_teacher_by_first(
         cmd=GetTeacherByFirstName(first_name=first_name)
     )
@@ -43,6 +60,12 @@ async def show_teach_by_first(
 async def show_teach_by_last(
     last_name: str, repository: TeacherShowService = Depends(TeacherShowService)
 ) -> TeacherReturn:
+    """
+    Корутина возвращает препода по фамилии
+    :param last_name:
+    :param repository:
+    :return:
+    """
     return await repository.find_teacher_by_last(
         cmd=GetTeacherByLastName(last_name=last_name)
     )
@@ -55,6 +78,12 @@ async def registration_teach(
     cmd: RegisterTeacher,
     repository: TeacherDataManagerService = Depends(TeacherDataManagerService),
 ) -> TeacherReturn:
+    """
+    Корутина создает препода
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.register_teacher(cmd=cmd)
 
 
@@ -64,6 +93,13 @@ async def upd_teach(
     cmd: UpdateTeacher,
     repository: TeacherDataManagerService = Depends(TeacherDataManagerService),
 ) -> TeacherReturn:
+    """
+    Корутина апдейтит препода
+    :param teach_id:
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.change_teacher(
         cmd=cmd, model_id=GetTeacherById(id=teach_id)
     )
@@ -74,4 +110,10 @@ async def del_teach(
     teach_id: UUID,
     repository: TeacherDataManagerService = Depends(TeacherDataManagerService),
 ) -> TeacherReturn:
+    """
+    Корутина удаляет препода
+    :param teach_id:
+    :param repository:
+    :return:
+    """
     return await repository.drop_teacher(model_id=GetTeacherById(id=teach_id))

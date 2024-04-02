@@ -6,7 +6,10 @@ from domain.company.schema import (
     GetCompanyById,
     GetCompanyByName,
     CompanyReturn,
-    CompanyCreate, CompanyWithCommand, CompanyWithCourse, CompanyFull,
+    CompanyCreate,
+    CompanyWithCommand,
+    CompanyWithCourse,
+    CompanyFull,
 )
 from infrastructure.database.models import Company
 from service.company_service import CompanyShowService, CompanyDataManagerService
@@ -18,6 +21,11 @@ comp_router = APIRouter(prefix="/company")
 async def show_all_comp(
     repository: CompanyShowService = Depends(CompanyShowService),
 ) -> list[Company]:
+    """
+    Корутина возвращает список компаний
+    :param repository:
+    :return:
+    """
     return await repository.get_all_comps()
 
 
@@ -25,6 +33,12 @@ async def show_all_comp(
 async def show_comp_by_id(
     comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
 ) -> CompanyReturn:
+    """
+    Корутина возвращает компанию по айди
+    :param comp_id:
+    :param repository:
+    :return:
+    """
     return await repository.find_comps_by_id(cmd=GetCompanyById(id=comp_id))
 
 
@@ -32,6 +46,12 @@ async def show_comp_by_id(
 async def show_comp_emps(
     comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
 ) -> CompanyWithCommand:
+    """
+    Корутина возвращает компанию со списком сотрудников
+    :param comp_id:
+    :param repository:
+    :return:
+    """
     return await repository.show_comp_with_emps(cmd=GetCompanyById(id=comp_id))
 
 
@@ -39,6 +59,12 @@ async def show_comp_emps(
 async def show_comp_cours(
     comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
 ) -> CompanyWithCourse:
+    """
+    Корутина возвращает компанию со списком курсов
+    :param comp_id:
+    :param repository:
+    :return:
+    """
     return await repository.show_comp_with_cours(cmd=GetCompanyById(id=comp_id))
 
 
@@ -46,6 +72,12 @@ async def show_comp_cours(
 async def show_comp_full(
     comp_id: UUID, repository: CompanyShowService = Depends(CompanyShowService)
 ) -> CompanyFull:
+    """
+    Корутина возвращает компанию со списком курсов и списком сотрудников
+    :param comp_id:
+    :param repository:
+    :return:
+    """
     return await repository.show_comp_full(cmd=GetCompanyById(id=comp_id))
 
 
@@ -53,6 +85,12 @@ async def show_comp_full(
 async def show_comp_by_name(
     name: str, repository: CompanyShowService = Depends(CompanyShowService)
 ) -> CompanyReturn:
+    """
+    Корутина возвращает компанию по названию
+    :param name:
+    :param repository:
+    :return:
+    """
     return await repository.find_comps_by_name(cmd=GetCompanyByName(name=name))
 
 
@@ -63,6 +101,12 @@ async def registration_comp(
     cmd: CompanyCreate,
     repository: CompanyDataManagerService = Depends(CompanyDataManagerService),
 ) -> CompanyReturn:
+    """
+    Корутина для создания компании
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.register_comp(cmd=cmd)
 
 
@@ -72,6 +116,13 @@ async def upd_comp(
     cmd: CompanyCreate,
     repository: CompanyDataManagerService = Depends(CompanyDataManagerService),
 ) -> CompanyReturn:
+    """
+    Корутина апдейтит компанию
+    :param comp_id:
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.change_comp(cmd=cmd, model_id=GetCompanyById(id=comp_id))
 
 
@@ -80,4 +131,10 @@ async def del_comp(
     comp_id: UUID,
     repository: CompanyDataManagerService = Depends(CompanyDataManagerService),
 ) -> CompanyReturn:
+    """
+    Корутина удаляет компанию
+    :param comp_id:
+    :param repository:
+    :return:
+    """
     return await repository.drop_comp(model_id=GetCompanyById(id=comp_id))

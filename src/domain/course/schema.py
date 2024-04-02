@@ -2,6 +2,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, field_validator, model_validator
 
+from domain.teacher.schema import TeacherReturn
+
 
 class GetCourseById(BaseModel):
     id: UUID
@@ -23,3 +25,7 @@ class CourseCreate(CourseUpdate):
 
 class CourseReturn(GetCourseById, CourseCreate):
     pass
+
+
+class CourseWithTeachers(CourseReturn):
+    teachers: list[TeacherReturn]

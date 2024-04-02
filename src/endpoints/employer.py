@@ -20,6 +20,11 @@ emp_router = APIRouter(prefix="/employers")
 async def show_all_emp(
     repository: EmployerShowService = Depends(EmployerShowService),
 ) -> list[Employer]:
+    """
+    Корутина возвращает список сотрудников
+    :param repository:
+    :return:
+    """
     return await repository.get_all_employers()
 
 
@@ -27,6 +32,12 @@ async def show_all_emp(
 async def show_emp_by_id(
     emp_id: UUID, repository: EmployerShowService = Depends(EmployerShowService)
 ) -> EmployerReturn:
+    """
+    Корутина возвращает сотрудника по айди
+    :param emp_id:
+    :param repository:
+    :return:
+    """
     return await repository.find_employer_by_id(cmd=GetEmployerById(id=emp_id))
 
 
@@ -34,6 +45,12 @@ async def show_emp_by_id(
 async def show_teach_by_first(
     first_name: str, repository: EmployerShowService = Depends(EmployerShowService)
 ) -> EmployerReturn:
+    """
+    Корутина возвращает сотрудника по имени
+    :param first_name:
+    :param repository:
+    :return:
+    """
     return await repository.find_employer_by_first(
         cmd=GetEmployerByFirstName(first_name=first_name)
     )
@@ -43,6 +60,12 @@ async def show_teach_by_first(
 async def show_teach_by_last(
     last_name: str, repository: EmployerShowService = Depends(EmployerShowService)
 ) -> EmployerReturn:
+    """
+    Корутина возвращает сотрудника по фамилии
+    :param last_name:
+    :param repository:
+    :return:
+    """
     return await repository.find_employer_by_last(
         cmd=GetEmployerByLastName(last_name=last_name)
     )
@@ -57,6 +80,12 @@ async def registration_emp(
     cmd: RegisterEmployer,
     repository: EmployerDataManagerService = Depends(EmployerDataManagerService),
 ) -> EmployerReturn:
+    """
+    Корутина создает сотрудника
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.register_employer(cmd=cmd)
 
 
@@ -66,6 +95,13 @@ async def upd_teach(
     cmd: UpdateEmployer,
     repository: EmployerDataManagerService = Depends(EmployerDataManagerService),
 ) -> EmployerReturn:
+    """
+    Корутина апдейтит сотрудника
+    :param emp_id:
+    :param cmd:
+    :param repository:
+    :return:
+    """
     return await repository.change_employer(
         cmd=cmd, model_id=GetEmployerById(id=emp_id)
     )
@@ -76,4 +112,10 @@ async def del_teach(
     emp_id: UUID,
     repository: EmployerDataManagerService = Depends(EmployerDataManagerService),
 ) -> EmployerReturn:
+    """
+    Корутина удаляет курс
+    :param emp_id:
+    :param repository:
+    :return:
+    """
     return await repository.drop_employer(model_id=GetEmployerById(id=emp_id))
